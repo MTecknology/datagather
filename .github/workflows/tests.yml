@@ -1,0 +1,21 @@
+name: Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        python: ['3.7', '3.8', '3.9', '3.10']
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v3
+      - name: Set Up Python ${{ matrix.python }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Test Dependencies
+        run: python -m pip install -U tox
+      - name: Run Tests
+        run: python -m tox -e py

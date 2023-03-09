@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+import glob
+import io
+
+
+def main():
+    with open('checks.rst', 'w') as fh:
+        s = build_stub('Checks', 'run')
+        fh.write(s.getvalue())
+    with open('loggers.rst', 'w') as fh:
+        s = build_stub('Loggers', 'send')
+        fh.write(s.getvalue())
+
+
+def build_stub(title, func):
+    modpath = title.lower()
+    stub = io.StringIO()
+    stub.write(f'{title}\n')
+    stub.write('='.join('' for _ in range(-1, len(title))))
+    stub.write(f'\n\n.. automodule:: datagather.{modpath}\n')
+    for filepath in glob.glob(f'../src/datagather/{modpath}/*.py'):
+        modname = filepath.split('/')[-1].replace('.py', '')
+        if modname.startswith('__'):
+            continue
+        stub.write(f'\n{modname}\n')
+        stub.write('-'.join('' for _ in range(-1, len(modname))))
+        stub.write(f'\n\n.. autofunction:: datagather.{modpath}.{modname}.{func}\n')
+    return stub
+
+
+if __name__ == '__main__':
+    main()

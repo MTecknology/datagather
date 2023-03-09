@@ -1,0 +1,11 @@
+# docs
+site
+_build/
+# docs:genstubs
+loggers.rst
+checks.rst
+
+# python
+dist
+*.pyc
+__pycache__/

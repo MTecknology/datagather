@@ -1,0 +1,25 @@
+name: Release
+on:
+  push:
+    branches:
+      - TODO  # should trigger on version tags
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repo
+        uses: actions/checkout@v2
+      - name: Set Up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+      - name: Install Build Dependencies
+        run: python -m pip install -U setuptools wheel build
+      - name: Build Project
+        run: python -m build .
+      - name: Publish Project
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.pypi_password }}
+          skip_existing: true
